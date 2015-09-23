@@ -1,0 +1,12 @@
+#include "prodcons.h"
+
+void consumer(int count)
+{
+	int i;
+	
+	while(n>count)
+	{
+		printf("Value of n- Consume side :\t%d\n",n);
+		n--;
+	}
+}
