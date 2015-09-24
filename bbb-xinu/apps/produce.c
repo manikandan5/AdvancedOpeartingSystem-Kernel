@@ -1,4 +1,5 @@
 #include "prodcons.h"
+#include <stddef.h>
 
 void producer(int count)
 {

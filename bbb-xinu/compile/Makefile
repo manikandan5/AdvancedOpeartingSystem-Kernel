@@ -33,6 +33,7 @@ MKVERS		=	$(TOPDIR)/compile/bin/mkvers
 REBUILDFLAGS	=	-s $(TOPDIR)/system  debug.c 	\
 			-s $(TOPDIR)/lib			\
 			-s $(TOPDIR)/device/tty			\
+			-s $(TOPDIR)/apps			\
 			-s $(TOPDIR)/device/nam			\
 			-s $(TOPDIR)/device/eth			\
 			-s $(TOPDIR)/device/rds			\

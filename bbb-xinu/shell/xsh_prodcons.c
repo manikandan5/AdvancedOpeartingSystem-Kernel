@@ -1,4 +1,5 @@
 #include <xinu.h>
+#include <ctype.h>
 #include "prodcons.h"
 
 int n;                 //Definition for global variable 'n'
@@ -8,6 +9,7 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 {	
 	int count = 2000; 
       	int i;	
+	int exit=0;
 	//Argument verifications and validations
 	if (nargs > 2) {
 		printf("Too many arguments\n");
@@ -15,11 +17,16 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 	}
 	else if (nargs ==2)
 	{
-		printf("Hello World\n");
+		printf("The execution has started\n");
 		count=0;
 		int dgt=1;
 		for(i=strlen(args[1])-1;i>=0;i--)
 		{
+			if(isalpha(args[1][i]))
+			{
+				printf("Invalid argument\n");
+				return 1;
+			}
 			count=count + (args[1][i]-'0')*dgt;
 			dgt=dgt*10;
 		}
