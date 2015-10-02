@@ -7,6 +7,8 @@ void consumer(int count)
 	
 	for(i=1; i<=count;i++)
 	{
+	        wait(produced);
 		printf("Value of n- Consume side :\t%d\n",n);
+		signal(consumed);
 	}
 }
