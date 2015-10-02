@@ -1,15 +1,18 @@
-#include <xinu.h>
 #include <ctype.h>
 #include "prodcons.h"
 
 int n;                 //Definition for global variable 'n'
 /*Now global variable n will be on Heap so it is accessible all the processes i.e. consume and produce*/
+sid32 produced, consumed;
 
 shellcmd xsh_prodcons(int nargs, char *args[])
 {	
 	int count = 2000; 
       	int i;	
 	int exit=0;
+
+	produced = semcreate(0);
+	consumed = semcreate(1);
 	//Argument verifications and validations
 	if (nargs > 2) {
 		printf("Too many arguments\n");
