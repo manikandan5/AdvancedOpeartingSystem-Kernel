@@ -14,10 +14,6 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 
 	produced = semcreate(0);
 	consumed = semcreate(1);
-<<<<<<< HEAD
-	
-=======
->>>>>>> 9aea085949db6ce230f5560a515d2ed582a569e0
 	//Argument verifications and validations
 
 	if (nargs > 2) 

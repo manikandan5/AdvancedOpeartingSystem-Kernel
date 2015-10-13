@@ -14,37 +14,44 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 
 	produced = semcreate(0);
 	consumed = semcreate(1);
+<<<<<<< HEAD
+	
+=======
+>>>>>>> 9aea085949db6ce230f5560a515d2ed582a569e0
 	//Argument verifications and validations
-	if (nargs > 2) {
+
+	if (nargs > 2) 
+	{
 		printf("Too many arguments\n");
 		return 1;
 	}
 	if(nargs==2)
-     {
-      len=strlen(args[1]);
-      for(j=len-1;j>=0;j--)
-       {
-        digit=args[1][j]-'0';
-        if(digit<0 || digit>9)
-        {
-        printf("Invalid Arguement passed\n");
-        return 1;
-        }
-        v=v+k*digit;
-        k=k*10;
-       }
-      count=v;
-      printf("Value of Count is %d \n",count);
-    }        
+     	{
+      		len=strlen(args[1]);
+      		for(j=len-1;j>=0;j--)
+       		{
+        		digit=args[1][j]-'0';
+        		if(digit<0 || digit>9)
+        		{
+        			printf("Invalid Arguement passed\n");
+        			return 1;
+        		}
+        		v=v+k*digit;
+        		k=k*10;
+       		}
+      		count=v;
+      		printf("Value of Count is %d \n",count);
+    	}        
 	
-	 //local varible to hold count
+	//local varible to hold count
 
-		//check args[1] if present assign value to count
+	//check args[1] if present assign value to count
 
-		//create the process producer and consumer and put them in ready queue.
-		//Look at the definations of function create and resume in exinu/system folder for reference.      
-		resume( create(producer, 1024, 20, "producer", 1, count) );
-		resume( create(consumer, 1024, 20, "consumer", 1, count) );
+	//create the process producer and consumer and put them in ready queue.
+	//Look at the definations of function create and resume in exinu/system folder for reference.      
+	
+	resume( create(producer, 1024, 20, "producer", 1, count) );
+	resume( create(consumer, 1024, 20, "consumer", 1, count) );
 	
 	return 1;
 }
