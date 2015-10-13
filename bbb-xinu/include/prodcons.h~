@@ -2,7 +2,8 @@
   
 
 /*Global variable for producer consumer*/
-extern int n=0; /*this is just declaration*/
+extern int n; /*this is just declaration*/
+extern sid32 produced,consumed;
 
 /*function Prototype*/
 void consumer(int count);

@@ -78,3 +78,6 @@ extern shellcmd xsh_hello	(int32, char *[]);
 
 /* prototype of prodcons command*/
 extern shellcmd xsh_prodcons	(int32, char *[]);
+
+/* prototype of reset command*/
+extern shellcmd xsh_reset	(int32, char *[]);

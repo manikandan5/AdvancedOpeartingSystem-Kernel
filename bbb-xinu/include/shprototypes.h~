@@ -75,3 +75,6 @@ extern	shellcmd  xsh_help	(int32, char *[]);
 
 /* prototype of hello command*/
 extern shellcmd xsh_hello	(int32, char *[]);
+
+/* prototype of prodcons command*/
+extern shellcmd xsh_prodcons	(int32, char *[]);
