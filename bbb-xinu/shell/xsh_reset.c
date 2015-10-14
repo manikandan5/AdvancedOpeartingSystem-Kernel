@@ -1,4 +1,4 @@
-/* xsh_date.c - xsh_date */
+/* xsh_reset.c - xsh_reset */
 
 #include <xinu.h>
 #include <string.h>
