@@ -1,6 +1,7 @@
 #include <ctype.h>
-
 #include <future.h>
+#include <ctype.h>
+
 
 int n;                 //Definition for global variable 'n'
 /*Now global variable n will be on Heap so it is accessible all the processes i.e. consume and produce*/
@@ -39,14 +40,14 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 			f_exclusive = future_alloc(FUTURE_EXCLUSIVE);
 			f_shared = future_alloc(FUTURE_SHARED);
 			f_queue = future_alloc(FUTURE_QUEUE);
-/*
+
 			resume( create(future_cons, 1024, 20, "fcons1", 1, f_exclusive));
 			resume( create(future_prod, 1024, 20, "fprod1", 1, f_exclusive));
 			resume( create(future_cons, 1024, 20, "fcons2", 1, f_exclusive));
 			resume( create(future_prod, 1024, 20, "fprod2", 1, f_exclusive));
 			resume( create(future_cons, 1024, 20, "fcons3", 1, f_exclusive));
 			resume( create(future_prod, 1024, 20, "fprod3", 1, f_exclusive));
-*/
+
 			// Test FUTURE_SHARED
 			
 			resume( create(future_cons, 1024, 20, "fcons2", 1, f_shared) );
@@ -54,9 +55,9 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 			resume( create(future_cons, 1024, 20, "fcons4", 1, f_shared) ); 
 			resume( create(future_cons, 1024, 20, "fcons5", 1, f_shared) );
 			resume( create(future_prod, 1024, 20, "fprod2", 1, f_shared) );
-/*
+
 			// Test FUTURE_QUEUE
-			///*
+			
 			resume( create(future_cons, 1024, 20, "fcons6", 1, f_queue) );
 			resume( create(future_cons, 1024, 20, "fcons7", 1, f_queue) );
 			resume( create(future_cons, 1024, 20, "fcons7", 1, f_queue) );
@@ -64,19 +65,19 @@ shellcmd xsh_prodcons(int nargs, char *args[])
 			resume( create(future_prod, 1024, 20, "fprod3", 1, f_queue) );
 			resume( create(future_prod, 1024, 20, "fprod4", 1, f_queue) );
 			resume( create(future_prod, 1024, 20, "fprod5", 1, f_queue) );
-			resume( create(future_prod, 1024, 20, "fprod6", 1, f_queue) );*/
-          //*/
-/*
+			resume( create(future_prod, 1024, 20, "fprod6", 1, f_queue) );
+         
+
 			resume( create(future_cons, 1024, 20, "fcons1", 1, f1) );
 			resume( create(future_prod, 1024, 20, "fprod1", 1, f1) );
 			resume( create(future_cons, 1024, 20, "fcons2", 1, f2) );
 			resume( create(future_prod, 1024, 20, "fprod2", 1, f2) );
 			resume( create(future_cons, 1024, 20, "fcons3", 1, f3) );
 			resume( create(future_prod, 1024, 20, "fprod3", 1, f3) );
-			*/
-			//future_free(f1);
-			//future_free(f2);
-			//future_free(f3);
+			
+			future_free(f1);
+			future_free(f2);
+			future_free(f3);
 
 			return 1;
 		}
