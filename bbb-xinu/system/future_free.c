@@ -1,10 +1,11 @@
-#include <future.h>
+#include<future.h>
 
-syscall future_free(future *f)
+syscall future_free(future* f)
 {
-	deallocateQueue(&(f->set_queue));
-	deallocateQueue(&(f->get_queue));
-	return freemem((char*)f, sizeof(f));
-	//freemem(f , sizeof(future));
-	//return OK;
+	int status;
+	
+	status=freemem((char*) f,sizeof(future));
+	if (status< 1)
+		return SYSERR;
+	return OK;
 }
