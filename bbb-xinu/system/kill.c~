@@ -28,18 +28,18 @@ syscall	kill(
 		close(prptr->prdesc[i]);
 	}
 	int length=prptr->prstklen;
-	int count=0;
+	int i=0;
 	while(length>0)
 	{
 		if(*prptr->prstkbase=='#')
 		{
-			count++;
+			i++;
 		}
 		*--prptr->prstkbase;
 		--length;
 	}
-	count=(prptr->prstklen)-count;
-	printf("Number of iterations:%d",count);
+	count=(prptr->prstklen)-i;
+	printf("Number of iterations:%d",i);
 	length=prptr->prstklen;
 	while(length>0)
 	{
