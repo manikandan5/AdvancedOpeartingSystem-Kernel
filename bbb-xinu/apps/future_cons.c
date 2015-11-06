@@ -9,7 +9,7 @@ uint future_cons(future *fut)
 	status = future_get(fut, &i);
 	if(status<1)
 	{
-		printf("future_get failed\n");
+		//printf("future_get failed\n");
 		return -1;
 	}
 	printf("it consumed %d\n",i);

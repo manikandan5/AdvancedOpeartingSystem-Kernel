@@ -1,0 +1,21 @@
+Written comparison of the sizes requested in the exercise. Please elaborate on the reason behind the difference
+
+Below you can see the memory list prior to the custom stack allocation where we assign the block which has the smallest difference between the size of the block and the size which needs to be allocated.
+
+xsh $ freemem
+Block address  Length of Block
+-------------  ---------------
+Memory Block : -2130600532      Length of Block : -214496 
+Assigned 100 bytes
+Memory Block : -2130600532      Length of Block : -214704 
+Assigned 200 bytes
+Memory Block : -2130600532      Length of Block : -215104 
+Assigned 500 bytes
+Memory Block : -2130600532      Length of Block : -216112 
+Freed  500 bytes
+Memory Block : -2130600532      Length of Block : -216112
+
+Post calling a process, we are able to assign the stack as shown above. It can seen that 500 bytes are allocated, so the memory from last block gets assigned where as if we has used xinu stack allocation then the block would be allocated from the second last block.
+
+
+

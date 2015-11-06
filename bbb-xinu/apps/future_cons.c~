@@ -2,7 +2,7 @@
 
 typedef unsigned int            uint;
 
-uint32 future_cons(future *fut) 
+uint future_cons(future *fut) 
 {
 
 	int i, status;

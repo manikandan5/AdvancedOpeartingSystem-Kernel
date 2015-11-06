@@ -81,3 +81,9 @@ extern shellcmd xsh_prodcons	(int32, char *[]);
 
 /* prototype of reset command*/
 extern shellcmd xsh_reset	(int32, char *[]);
+
+/* in file xsh_traverse.c*/
+extern shellcmd xsh_traverse    (int32, char *[]);
+
+/* in file xsh_freemem.c*/
+extern shellcmd xsh_freemem     (int32, char *[]);
