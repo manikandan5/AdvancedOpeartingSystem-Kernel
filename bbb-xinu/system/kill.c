@@ -1,3 +1,5 @@
+/* kill.c - kill */
+
 #include <xinu.h>
 
 /*------------------------------------------------------------------------
@@ -27,24 +29,22 @@ syscall	kill(
 	for (i=0; i<3; i++) {
 		close(prptr->prdesc[i]);
 	}
-	int length=prptr->prstklen;
+	int len=prptr->prstklen;
 	int count=0;
-	while(length>0)
+	while(len>0){
+	if(*prptr->prstkbase=='#')
 	{
-		if(*prptr->prstkbase=='#')
-		{
-			count++;
-		}
-		*--prptr->prstkbase;
-		--length;
+	count++;
+	}
+	*--prptr->prstkbase;
+	--len;
 	}
 	count=(prptr->prstklen)-count;
-	printf("Number of iterations:%d",count);
-	length=prptr->prstklen;
-	while(length>0)
-	{
-		*++prptr->prstkbase;
-		--length;
+	//printf("Count:%d",count);
+	len=prptr->prstklen;
+	while(len>0){
+	*++prptr->prstkbase;
+	--len;
 	}
 	freestk(prptr->prstkbase, prptr->prstklen);
 

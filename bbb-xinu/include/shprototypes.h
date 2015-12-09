@@ -73,17 +73,24 @@ extern	shellcmd  xsh_uptime	(int32, char *[]);
 /* in file xsh_help.c */
 extern	shellcmd  xsh_help	(int32, char *[]);
 
-/* prototype of hello command*/
-extern shellcmd xsh_hello	(int32, char *[]);
+/* in file xsh_hello.c */
+extern shellcmd xsh_hello       (int32, char *[]);
 
-/* prototype of prodcons command*/
-extern shellcmd xsh_prodcons	(int32, char *[]);
+/* in file xsh_prodcons.c*/
+extern shellcmd xsh_prodcons    (int32, char *[]);
 
-/* prototype of reset command*/
-extern shellcmd xsh_reset	(int32, char *[]);
+/* in file xsh_reset.c*/
+extern shellcmd xsh_reset       (int32, char *[]);
 
-/* in file xsh_traverse.c*/
-extern shellcmd xsh_traverse    (int32, char *[]);
+/* in file xsh_traversal.c*/
+extern shellcmd xsh_traversal   (int32, char *[]);
 
-/* in file xsh_freemem.c*/
-extern shellcmd xsh_freemem     (int32, char *[]);
+/* in file xsh_memcmp.c*/
+extern shellcmd xsh_memcmp      (int32, char *[]);
+
+/* in file xsh_chat.c*/
+extern shellcmd xsh_chat	(int32,	char *[]);
+
+/* in file xsh_udpclient.c*/
+extern shellcmd xsh_udpclient	(int32,	char *[]);
+

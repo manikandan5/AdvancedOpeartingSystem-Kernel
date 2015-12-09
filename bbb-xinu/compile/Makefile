@@ -10,6 +10,12 @@
 
 COMPILER_ROOT	=	arm-none-eabi-
 
+#ubuntu VM location of libgcc
+LIBGCC_LOC      =      /usr/lib/gcc/arm-none-eabi/4.9.3  
+
+#SoIC linux machine location of libgcc
+# LIBGCC_LOC      =      /l/arm2/devtools/lib/gcc/arm-none-eabi/4.8.4
+
 PNAME		=	bbb
 PLAT		=	Platform_$(PNAME)
 TOPDIR		=	..
@@ -29,11 +35,11 @@ DEPSFILE	=	.deps
 DEFSFILE	=	.defs
 VERSIONFILE	=	version
 LDSCRIPT	=	ld.script
+
 MKVERS		=	$(TOPDIR)/compile/bin/mkvers
 REBUILDFLAGS	=	-s $(TOPDIR)/system  debug.c 	\
 			-s $(TOPDIR)/lib			\
 			-s $(TOPDIR)/device/tty			\
-			-s $(TOPDIR)/apps			\
 			-s $(TOPDIR)/device/nam			\
 			-s $(TOPDIR)/device/eth			\
 			-s $(TOPDIR)/device/rds			\
@@ -42,7 +48,8 @@ REBUILDFLAGS	=	-s $(TOPDIR)/system  debug.c 	\
 			-s $(TOPDIR)/device/rfs			\
 			-s $(TOPDIR)/net  'arp_dump*'  		\
 				'dhcp_dump*'  pxe.c		\
-			-s $(TOPDIR)/shell  'xsh_rdstest*'
+			-s $(TOPDIR)/shell  'xsh_rdstest*'      \
+			-s $(TOPDIR)/apps
 
 INCLUDE		=	-I$(TOPDIR)/include
 DEFS		= 	-DBSDURG -DVERSION=\""`cat $(VERSIONFILE)`"\"
@@ -102,7 +109,7 @@ export
 
 xinu:	Makefile rebuild $(BLDDIRS) $(DEFSFILE) $(DEPSFILE) $(CONFH) $(CONFC) $(LD_LIST)
 	@echo;echo 'Loading object files to produce xinu'
-	@$(LD) $(LDFLAGS) $(LD_LIST) -o $(XINU) -L/usr/lib/gcc/arm-none-eabi/4.9.3 -lgcc
+	@$(LD) $(LDFLAGS) $(LD_LIST) -o $(XINU) -L$(LIBGCC_LOC) -lgcc
 	@$(OBJCOPY) -O binary $(XINU) $(XINUBIN)
 	@./uboot-tool/mkimage -A arm -O linux -T kernel -C none -a 0x81000000 -e 0x81000000 -d $(XINUBIN) $(XINUBOOT)
 

@@ -28,12 +28,14 @@ const	struct	cmdent	cmdtab[] = {
 	{"udpecho",	FALSE,	xsh_udpecho},
 	{"udpeserver",	FALSE,	xsh_udpeserver},
 	{"uptime",	FALSE,	xsh_uptime},
-	{"?",		FALSE,	xsh_help},
-	{"hello",	FALSE,	xsh_hello},
-	{"prodcons",	FALSE,	xsh_prodcons},
+	{"hello",       FALSE,  xsh_hello},
+        {"prodcons",    FALSE,  xsh_prodcons},
+        {"reset",       FALSE,  xsh_reset},
 	{"traversal",   FALSE,  xsh_traversal},
-	{"freemem",     FALSE,  xsh_freemem},
-	{"reset",	FALSE,	xsh_reset}
+	{"memcmp",      FALSE,  xsh_memcmp},
+        {"?",		FALSE,	xsh_help},
+	{"chat",        FALSE,	xsh_chat}
+
 };
 
 uint32	ncmd = sizeof(cmdtab) / sizeof(struct cmdent);

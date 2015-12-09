@@ -1,63 +1,100 @@
-#include <future.h>
+#include<future.h>
 
-syscall future_get(future *f, int* value)
-{
-	if(f->flag == FUTURE_EXCLUSIVE)
-	{
-		f->pid = getpid();
-		if(f->state == FUTURE_EMPTY)
-		{
-			suspend(f->pid);
+syscall future_get(future *f, int *value){
+	intmask mask; 
+	pid32 p;
+	int i;
+	mask = disable();
+	if(f->flag==FUTURE_SHARED){
+		if(f->state==FUTURE_EMPTY||f->state==FUTURE_WAITING){
+			f->state=FUTURE_WAITING;			
+			en_queue(f->get_q,currpid);
+			suspend(currpid);
+			
 		}
-		*value = f->value ;
-		f->state = FUTURE_EMPTY;
-	}
-	else if(f->flag == FUTURE_SHARED)
-	{
-		if(f->state == FUTURE_EMPTY)
+		if(f->state==FUTURE_VALID){
+			*value=*(f->value);
+			if(isempty_q(f->get_q))
+				f->state=FUTURE_EMPTY;
+			restore(mask);
+			return OK;
+			
+		}
+		if (isempty_q(f->get_q))
+	        {
+			f->state = FUTURE_EMPTY; 
+		} 
+		else 
 		{
+			f->state = FUTURE_WAITING;
+		}
 		
-			enqueueFuture(&(f->get_queue),getpid());
-			suspend(getpid());
-		}
-		*value = f->value;
+		
+
 	}
-	else if (f->flag == FUTURE_QUEUE)
-	{
-        	if(f->set_queue.size == 0)
-		{
-		    enqueueFuture(&(f->get_queue), getpid());
-		    suspend(getpid());
+	if(f->flag==FUTURE_QUEUE){
+		if(f->state==FUTURE_EMPTY){
+			f->state=FUTURE_WAITING;
+			en_queue(f->get_q,currpid);
+			i=d_queue(f->set_q);
+			if(i!=-1){
+				p=get_q(f->set_q);
+				restore(mask);
+				ready(p);
+				suspend(currpid);
+			} else {
+			  suspend(currpid);
+			}
+		}
+		if(f->state==FUTURE_WAITING){
+			en_queue(f->get_q,currpid);
+			i=d_queue(f->set_q);
+			if(i!=-1){
+				p=get_q(f->set_q);
+				restore(mask);
+				suspend(currpid);
+			} else {
+				suspend(currpid);
+			}
+
+		}
+		if(f->state==FUTURE_VALID){		
+			*value=*(f->value);
+			
+			i=d_queue(f->set_q);
+			if(i!=-1){
+			   if(isempty_q(f->get_q)) {
+			      f->state = FUTURE_EMPTY;
+			   } else {
+				f->state=FUTURE_WAITING;
+				p=get_q(f->set_q);
+				ready(p);
+			   }
+			}
+			else{
+				if (isempty_q(f->get_q)) {
+				   f->state = FUTURE_EMPTY; 
+				} else {
+				   f->state = FUTURE_WAITING;
+				}
+			}
+			restore(mask);
+			return OK;
+		}
+	}
+	if(f->flag==FUTURE_EXCLUSIVE){
+		if(f->state==FUTURE_VALID){
+			f->state=FUTURE_EMPTY;
+			*value=*(f->value);
+			restore(mask);
+			return OK;
+			
 		}
 		else
 		{
-		    enqueueFuture(&(f->get_queue), getpid());
-		    resume(dequeueFuture(&(f->set_queue)));
-		    
-		    while(f->state != FUTURE_VALID)
-		    {
-		        resched();
-		    } 
-		} 
-        	*value = f->value;
-        	f->state = FUTURE_EMPTY; 
-    	}
-	else
-	{
-		kprintf("Unsupported future state!!!");
-		return SYSERR;
+			restore(mask);
+			return SYSERR;
+		}
 	}
-	return OK;
-	/*if(f->state == FUTURE_VALID)
-	{
-		*value = f->value;
-		f->state = FUTURE_EMPTY;
-		return OK;	
-	}
-	else if(f->state == FUTURE_EMPTY)
-	{
-		f->state = FUTURE_WAITING;
-		return OK;
-	}
-	return SYSERR;*/
+	return SYSERR;
 }

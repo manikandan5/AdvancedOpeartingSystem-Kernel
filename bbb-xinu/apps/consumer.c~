@@ -1,0 +1,17 @@
+#include "prodcons.h"
+
+ void consumer(int count)
+ {
+     int i=0;
+     //Code to consume values of global variable 'n' until the value
+     //of n is less than or equal to count
+     //print consumed value e.g. consumed : 8
+     for(i=0;i<count;i++){
+     wait(consumed);
+     printf("Consumed : %d \n",n--);
+     signal(produced);
+     }
+     printf("\n");
+     semdelete(produced);
+     semdelete(consumed);
+ }

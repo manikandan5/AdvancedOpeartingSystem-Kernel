@@ -1,100 +1,66 @@
-#include<future.h>
+/* future_get.c - future_get */
 
-syscall future_get(future *f, int *value){
-	intmask mask; 
-	pid32 p;
-	int i;
-	mask = disable();
-	if(f->flag==FUTURE_SHARED){
-		if(f->state==FUTURE_EMPTY||f->state==FUTURE_WAITING){
-			f->state=FUTURE_WAITING;			
-			en_queue(f->get_q,currpid);
-			suspend(currpid);
-			
-		}
-		if(f->state==FUTURE_VALID){
-			*value=*(f->value);
-			if(isempty_q(f->get_q))
-				f->state=FUTURE_EMPTY;
-			restore(mask);
-			return OK;
-			
-		}
-		if (isempty_q(f->get_q))
-	        {
-			f->state = FUTURE_EMPTY; 
-		} 
-		else 
+#include "future.h"
+
+/*------------------------------------------------------------------------
+ *  future_get - Used to retrieve a future value to a operation
+ *------------------------------------------------------------------------
+ */
+
+syscall future_get(future *f, int* value)
+{
+        intmask mask;
+        mask=disable();
+	if(f->flag==FUTURE_EXCLUSIVE)
+	{
+	 if(f->state==FUTURE_WAITING)
+	 {
+		return SYSERR;
+	 }
+	 else if(f->state==FUTURE_VALID)
+	 {
+	 	*value=f->value;
+                f->state=FUTURE_EMPTY;
+                return OK;
+	 }
+	 else if(f->state==FUTURE_EMPTY)
+	 {
+		f->state=FUTURE_WAITING;
+		wait(fut_sem);
+		*value=f->value;
+		printf("\nConsumed:%d",*value);
+		return OK;
+	 }
+	}
+	else if(f->flag==FUTURE_SHARED)
+	{
+		if(f->state==FUTURE_EMPTY)
 		{
-			f->state = FUTURE_WAITING;
+		enqueueFut(&(f->get_queue), getpid());
+		suspend(getpid());
 		}
-		
-		
-
+		*value=f->value;
+	 	printf("\nConsumed value: %d", *value);
+        }
+	else if(f->flag==FUTURE_QUEUE)
+	{
+	 if(f->set_queue.size==0)
+         {
+		wait(f_qsem2);
+         	enqueueFut(&(f->get_queue), getpid());
+		signal(f_qsem2);
+         	suspend(getpid());
+         }
+	 else
+	 {
+		wait(f_qsem2);
+		resume(dequeueFut(&(f->set_queue)));
+		signal(f_qsem2);
+	 }
+	 *value=f->value;
+	 sleep(1);
+	 printf("\nConsuming value: %d", value);
 	}
-	if(f->flag==FUTURE_QUEUE){
-		if(f->state==FUTURE_EMPTY){
-			f->state=FUTURE_WAITING;
-			en_queue(f->get_q,currpid);
-			i=d_queue(f->set_q);
-			if(i!=-1){
-				p=get_q(f->set_q);
-				restore(mask);
-				ready(p);
-				suspend(currpid);
-			} else {
-			  suspend(currpid);
-			}
-		}
-		if(f->state==FUTURE_WAITING){
-			en_queue(f->get_q,currpid);
-			i=d_queue(f->set_q);
-			if(i!=-1){
-				p=get_q(f->set_q);
-				restore(mask);
-				suspend(currpid);
-			} else {
-				suspend(currpid);
-			}
-
-		}
-		if(f->state==FUTURE_VALID){		
-			*value=*(f->value);
-			
-			i=d_queue(f->set_q);
-			if(i!=-1){
-			   if(isempty_q(f->get_q)) {
-			      f->state = FUTURE_EMPTY;
-			   } else {
-				f->state=FUTURE_WAITING;
-				p=get_q(f->set_q);
-				ready(p);
-			   }
-			}
-			else{
-				if (isempty_q(f->get_q)) {
-				   f->state = FUTURE_EMPTY; 
-				} else {
-				   f->state = FUTURE_WAITING;
-				}
-			}
-			restore(mask);
-			return OK;
-		}
-	}
-	if(f->flag==FUTURE_EXCLUSIVE){
-		if(f->state==FUTURE_VALID){
-			f->state=FUTURE_EMPTY;
-			*value=*(f->value);
-			restore(mask);
-			return OK;
-			
-		}
-		else
-		{
-			restore(mask);
-			return SYSERR;
-		}
-	}
-	return SYSERR;
+        restore(mask);
+	return OK;
 }

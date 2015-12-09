@@ -2,60 +2,57 @@
 
 #include <xinu.h>
 
-char *new_getstk(uint32 nbytes)
+/*------------------------------------------------------------------------
+ *  new_getstk  -  Allocate stack memory, returning highest word address using Best FIT method
+ *------------------------------------------------------------------------
+ */
+char  	*new_getstk(
+	  uint32	nbytes		/* Size of memory requested	*/
+	)
 {
-	intmask	mask;			
-	struct	memblk	*p, *current;	
-	struct	memblk	*bestFit, *bestFitp; 
+	intmask	mask;			/* Saved interrupt mask		*/
+	struct	memblk	*prev, *curr;	/* Walk through memory list	*/
+	struct	memblk	*best_fits, *best_fitsprev; /* Record block that fits	*/
 	mask = disable();
-
-	if (nbytes == 0) 
-	{
+	if (nbytes == 0) {
 		restore(mask);
 		return (char *)SYSERR;
 	}
 
-	nbytes = (uint32) roundmb(nbytes);	
+	nbytes = (uint32) roundmb(nbytes);	/* Use mblock multiples	*/
 
-	p = &memlist;
-	current = memlist.mnext;
-	bestFit = p;
-	bestFitp = NULL;  
-
-	while (current != NULL) 
-	{			
-		if ((current->mlength >= nbytes)&&(current->mlength>bestFit->mlength)) 
-		{	
-			bestFit = current;		
-			bestFitp = p;
+	prev = &memlist;
+	curr = memlist.mnext;
+	best_fits = prev;
+	best_fitsprev = NULL;  /* Just to avoid a compiler warning */
+	while (curr != NULL) {			/* Scan entire list	*/
+		if ((curr->mlength >= nbytes)&&(curr->mlength>best_fits->mlength)) {	/* Record block address	*/
+			best_fits = curr;		/*   when request fits	*/
+			best_fitsprev = prev;
 		}
-		p = current;
-		current = current->mnext;
+		prev = curr;
+		curr = curr->mnext;
 	}
 
-	if (bestFit == NULL) 
-	{	
+	if (best_fits == NULL) {			/* No block was found	*/
 		restore(mask);
 		return (char *)SYSERR;
 	}
-	if (nbytes == bestFit->mlength)
-	{		
-		bestFitp->mnext = bestFit->mnext;
-	} 
-	else 
-	{				
-		bestFit->mlength -= nbytes;
-		bestFit = (struct memblk *)((uint32)bestFit + bestFit->mlength);
+	if (nbytes == best_fits->mlength) {		/* Block is exact match	*/
+		best_fitsprev->mnext = best_fits->mnext;
+	} else {				/* Remove top section	*/
+		best_fits->mlength -= nbytes;
+		best_fits = (struct memblk *)((uint32)best_fits + best_fits->mlength);
 	}
 	memlist.mlength -= nbytes;
 	restore(mask);
-	char* rtn=(char *)((uint32) bestFit + nbytes - sizeof(uint32));
+	char* rtn=(char *)((uint32) best_fits + nbytes - sizeof(uint32));
 	int size=nbytes;
 	while(size>0)
 	{
-		*rtn='#';
-		*--rtn;
-		--size;
+	*rtn='#';
+	*--rtn;
+	--size;
 	}
-	return (char *)((uint32) bestFit + nbytes - sizeof(uint32));
+	return (char *)((uint32) best_fits + nbytes - sizeof(uint32));
 }
