@@ -59,7 +59,7 @@ status	arp_resolve (
 			continue;
 		}
 
-		if (arptr->arstate == AR_RESOLVED && (clktime-(arptr->arp_entry_time))>20)
+		if (arptr->arstate == AR_RESOLVED && (clktime-(arptr->arp_entry_time))>300)
 		{
 			arptr->arstate = AR_FREE;
 		}
@@ -202,7 +202,7 @@ void	arp_in (
 		}
 
 		/* Clear an ARP Entry which is older than 10 seconds */
-		if (arptr->arstate == AR_RESOLVED && (clktime-(arptr->arp_entry_time))>20)
+		if (arptr->arstate == AR_RESOLVED && (clktime-(arptr->arp_entry_time))>300)
 		{
 			arptr->arstate = AR_FREE;
 		}

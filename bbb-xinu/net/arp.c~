@@ -58,6 +58,12 @@ status	arp_resolve (
 		if (arptr->arstate == AR_FREE) {
 			continue;
 		}
+
+		if (arptr->arstate == AR_RESOLVED && (clktime-(arptr->arp_entry_time))>300)
+		{
+			arptr->arstate = AR_FREE;
+		}
+
 		if (arptr->arpaddr == nxthop) { /* Adddress is in cache	*/
 			break;
 		}

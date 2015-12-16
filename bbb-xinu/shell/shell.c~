@@ -34,8 +34,8 @@ const	struct	cmdent	cmdtab[] = {
 	{"traversal",   FALSE,  xsh_traversal},
 	{"memcmp",      FALSE,  xsh_memcmp},
         {"?",		FALSE,	xsh_help},
-	{"chat",        FALSE,	xsh_chat}
-
+	{"chat",        FALSE,	xsh_chat},
+	{"udpclient",   FALSE,	xsh_udpclient}
 };
 
 uint32	ncmd = sizeof(cmdtab) / sizeof(struct cmdent);
