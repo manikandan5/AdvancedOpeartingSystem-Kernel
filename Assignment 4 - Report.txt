@@ -1,0 +1,20 @@
+All the producer functionalities like future_prod.c, future_set.c, future_alloc.c and future.h was developed by 
+Manikandan Murugesan.
+
+future.h holds the code for the future datastructure and future_alloc.c allocates memory to empty future.
+
+In future_prod.c, the code to produce a value and saving into the future datastructure based on the state of the future is done.
+If the future is in VALID state already, then the producer cannot produce a new value into the future. The setting of the value 
+part is taken care by the code in future_set.c 
+
+The consumer side code was implemented by Abhishek Mehra which are done in the files future_cons.c, future_gets.c, future_free.c
+and xsh_prodcons.h
+
+The consumer consumes the value produced by the producer based on the state of the future and the code for that is implemented
+in future_cons.c and future_get.c
+
+The code in future_free.c frees the memory allotted to the future 
+
+
+
+

@@ -1,0 +1,10 @@
+01)     Two processes are allowed to work simultaneously in a mutually exclusive manner which implements synchronization. 
+Both processes work in such a way that the resources they are sharing gets accessed by only of them at a time. The above 
+mentioned concept is achieved, by process 1 waiting while process 2 accesses the resource and makes the required changes, 
+and then it removes it hold, allowing process 1 to access the resource. Thus by using semaphores we ensure that each value 
+being produced is being consumed and there is a complete synchronization between the two processes. This solves the problem 
+of producer consumer faced earlier.
+
+02)     A single semaphore cannot be used by both producer and consumer.  In a scenario when the consumer is called prior to 
+the producer, in that case the wait function will be called and there will be no synchoronisation between the producer and 
+the consumer. Hence we need two semaphores to make the synchoronisation work between the producer and the consumer.
